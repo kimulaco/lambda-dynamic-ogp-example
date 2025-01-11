@@ -27,6 +27,8 @@ export class ApiStack extends cdk.Stack {
           '.woff': 'binary',
           '.woff2': 'binary'
         },
+        nodeModules: ['sharp'],
+        forceDockerBundling: true,
       },
       environment: {
         STAGE: props.stage,
@@ -37,6 +39,8 @@ export class ApiStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_20_X,
       entry: index,
       handler: 'ogpMessage',
+      memorySize: 512,
+      timeout: cdk.Duration.seconds(10),
       bundling: {
         minify: true,
         sourceMap: true,
@@ -44,6 +48,8 @@ export class ApiStack extends cdk.Stack {
           '.woff': 'binary',
           '.woff2': 'binary'
         },
+        nodeModules: ['sharp'],
+        forceDockerBundling: true,
       },
       environment: {
         STAGE: props.stage,
@@ -61,6 +67,7 @@ export class ApiStack extends cdk.Stack {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
         allowMethods: apigateway.Cors.ALL_METHODS,
       },
+      binaryMediaTypes: ['*/*'],
     });
 
     // エンドポイントの作成
@@ -69,7 +76,9 @@ export class ApiStack extends cdk.Stack {
 
     const ogp = api.root.addResource('ogp');
     const message = ogp.addResource('message');
-    message.addMethod('GET', new apigateway.LambdaIntegration(ogpMessageFunction));
+    message.addMethod('GET', new apigateway.LambdaIntegration(ogpMessageFunction, {
+      contentHandling: apigateway.ContentHandling.CONVERT_TO_BINARY,
+    }));
 
     // 出力の設定
     new cdk.CfnOutput(this, 'ApiUrl', {

@@ -1,8 +1,8 @@
 import { APIGatewayProxyHandler, APIGatewayProxyEvent } from 'aws-lambda';
 import satori, { Font } from 'satori'
 import sharp from 'sharp'
-import notoSansJpJapanese400Normal from './fonts/noto-sans-jp-japanese-400-normal.woff2';
-import notoSansJpLatin400Normal from './fonts/noto-sans-jp-latin-400-normal.woff2';
+import notoSansJpJapanese400Normal from './fonts/noto-sans-jp-japanese-400-normal.woff';
+import notoSansJpLatin400Normal from './fonts/noto-sans-jp-latin-400-normal.woff';
 
 const fonts: Font[] = [
   {
