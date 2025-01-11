@@ -1,12 +1,15 @@
 import path from 'path'
+import { fileURLToPath } from 'url'
 import * as cdk from 'aws-cdk-lib'
 import * as apigateway from 'aws-cdk-lib/aws-apigateway'
 import * as nodejsfunction from 'aws-cdk-lib/aws-lambda-nodejs'
 import { Construct } from 'constructs'
 import { COMMON_BUNDLING_OPTIONS, SATORI_BUNDLING_OPTIONS, FUNCTION_BASE_PROPS } from '../config/api'
 
-const getRootPath = (apiPath: string): string => {
-  return path.join(__dirname, '../../src', apiPath)
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+const getRootPath = (filePath: string): string => {
+  return path.join(__dirname, '../../src', filePath)
 }
 
 interface ApiStackProps extends cdk.StackProps {
@@ -29,7 +32,7 @@ export class ApiStack extends cdk.Stack {
 
     const ogpMessageFunction = new nodejsfunction.NodejsFunction(this, 'OgpMessageFunction', {
       ...FUNCTION_BASE_PROPS,
-      entry: getRootPath('api/ogp/message/index.tsx'),
+      entry: getRootPath('ogp/message/index.tsx'),
       bundling: SATORI_BUNDLING_OPTIONS,
       memorySize: 512,
       timeout: cdk.Duration.seconds(10),

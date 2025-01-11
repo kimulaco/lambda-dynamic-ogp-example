@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import satori, { Font } from 'satori'
 import sharp from 'sharp'
-import notoSansJpJapanese400Normal from '../../../assets/fonts/noto-sans-jp-japanese-400-normal.woff'
-import notoSansJpLatin400Normal from '../../../assets/fonts/noto-sans-jp-latin-400-normal.woff'
-import { OgpMessage } from '../../../components/OgpMessage'
+import notoSansJpJapanese400Normal from '@/assets/fonts/noto-sans-jp-japanese-400-normal.woff'
+import notoSansJpLatin400Normal from '@/assets/fonts/noto-sans-jp-latin-400-normal.woff'
+import { OgpMessage } from '@/components/OgpMessage'
 
 const fonts: Font[] = [
   {

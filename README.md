@@ -72,16 +72,20 @@ npm run lint
 npm run lint:fix
 ```
 
-## API エンドポイント
+## エンドポイント
 
-### GET /api/health
+### API
+
+#### GET /api/health
 
 - ヘルスチェック
 - レスポンス:
   - Content-Type: application/json
   - Body: `{ "status": "ok" }`
 
-### GET /api/ogp/message
+### OGP
+
+#### GET /ogp/message
 
 - OGP画像生成
 - クエリパラメータ:
