@@ -13,11 +13,26 @@ export class ApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
+    const index = path.join(__dirname, '../../src/index.ts');
+
     // Lambda関数の作成
     const pingFunction = new nodejsfunction.NodejsFunction(this, 'PingFunction', {
       runtime: lambda.Runtime.NODEJS_20_X,
-      entry: path.join(__dirname, '../../src/index.ts'),
+      entry: index,
       handler: 'ping',
+      bundling: {
+        minify: true,
+        sourceMap: true,
+      },
+      environment: {
+        STAGE: props.stage,
+      },
+    });
+
+    const ogpMessageFunction = new nodejsfunction.NodejsFunction(this, 'OgpMessageFunction', {
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: index,
+      handler: 'ogpMessage',
       bundling: {
         minify: true,
         sourceMap: true,
@@ -44,10 +59,14 @@ export class ApiStack extends cdk.Stack {
     const ping = api.root.addResource('ping');
     ping.addMethod('GET', new apigateway.LambdaIntegration(pingFunction));
 
+    const ogp = api.root.addResource('ogp');
+    const message = ogp.addResource('message');
+    message.addMethod('GET', new apigateway.LambdaIntegration(ogpMessageFunction));
+
     // 出力の設定
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: api.url,
       description: 'API Gateway URL',
     });
   }
-} 
+}
