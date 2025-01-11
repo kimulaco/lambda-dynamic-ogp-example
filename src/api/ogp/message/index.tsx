@@ -1,9 +1,9 @@
-import { APIGatewayProxyHandler, APIGatewayProxyEvent } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import satori, { Font } from 'satori';
 import sharp from 'sharp';
-import notoSansJpJapanese400Normal from './assets/fonts/noto-sans-jp-japanese-400-normal.woff';
-import notoSansJpLatin400Normal from './assets/fonts/noto-sans-jp-latin-400-normal.woff';
-import { OgpMessage } from './components/OgpMessage';
+import notoSansJpJapanese400Normal from '../../../assets/fonts/noto-sans-jp-japanese-400-normal.woff';
+import notoSansJpLatin400Normal from '../../../assets/fonts/noto-sans-jp-latin-400-normal.woff';
+import { OgpMessage } from '../../../components/OgpMessage';
 
 const fonts: Font[] = [
   {
@@ -20,20 +20,7 @@ const fonts: Font[] = [
   },
 ];
 
-export const ping: APIGatewayProxyHandler = async () => {
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      status: 'ok',
-    }),
-    isBase64Encoded: false,
-  };
-};
-
-export const ogpMessage = async (event: APIGatewayProxyEvent) => {
+export const index = async (event: APIGatewayProxyEvent) => {
   const message = event.queryStringParameters?.message || 'Hello, World!';
 
   try {

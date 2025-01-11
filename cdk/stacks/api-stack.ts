@@ -1,9 +1,17 @@
-import * as path from 'path';
+import path from 'path';
 import * as cdk from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
-import { Construct } from 'constructs';
 import * as nodejsfunction from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Construct } from 'constructs';
+import {
+  COMMON_BUNDLING_OPTIONS,
+  SATORI_BUNDLING_OPTIONS,
+  FUNCTION_BASE_PROPS,
+} from '../config/api'
+
+const getRootPath = (apiPath: string): string => {
+  return path.join(__dirname, '../../src', apiPath);
+};
 
 interface ApiStackProps extends cdk.StackProps {
   stage: string;
@@ -13,47 +21,29 @@ export class ApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const index = path.join(__dirname, '../../src/index.tsx');
-
-    const bundlingOptions = {
-      minify: true,
-      sourceMap: true,
-      loader: {
-        '.woff': 'binary',
-        '.woff2': 'binary'
-      },
-      nodeModules: ['sharp'],
-      forceDockerBundling: true,
-      jsx: 'automatic',
-      jsxFactory: 'React.createElement',
-      jsxFragment: 'React.Fragment',
-    };
-
     // Lambda関数の作成
-    const pingFunction = new nodejsfunction.NodejsFunction(this, 'PingFunction', {
-      runtime: lambda.Runtime.NODEJS_20_X,
-      entry: index,
-      handler: 'ping',
-      bundling: bundlingOptions,
+    const healthFunction = new nodejsfunction.NodejsFunction(this, 'HealthFunction', {
+      ...FUNCTION_BASE_PROPS,
+      entry: getRootPath('api/health/index.ts'),
+      bundling: COMMON_BUNDLING_OPTIONS,
       environment: {
         STAGE: props.stage,
       },
     });
 
     const ogpMessageFunction = new nodejsfunction.NodejsFunction(this, 'OgpMessageFunction', {
-      runtime: lambda.Runtime.NODEJS_20_X,
-      entry: index,
-      handler: 'ogpMessage',
+      ...FUNCTION_BASE_PROPS,
+      entry: getRootPath('api/ogp/message/index.tsx'),
+      bundling: SATORI_BUNDLING_OPTIONS,
       memorySize: 512,
       timeout: cdk.Duration.seconds(10),
-      bundling: bundlingOptions,
       environment: {
         STAGE: props.stage,
       },
     });
 
     // API Gatewayの作成
-    const api = new apigateway.RestApi(this, 'DynamicOgpApi', {
+    const restApi = new apigateway.RestApi(this, 'DynamicOgpApi', {
       restApiName: `Dynamic OGP API (${props.stage})`,
       description: `Dynamic OGP API - ${props.stage} environment`,
       deployOptions: {
@@ -67,10 +57,11 @@ export class ApiStack extends cdk.Stack {
     });
 
     // エンドポイントの作成
-    const ping = api.root.addResource('ping');
-    ping.addMethod('GET', new apigateway.LambdaIntegration(pingFunction));
+    const api = restApi.root.addResource('api');
+    const health = api.addResource('health');
+    health.addMethod('GET', new apigateway.LambdaIntegration(healthFunction));
 
-    const ogp = api.root.addResource('ogp');
+    const ogp = api.addResource('ogp');
     const message = ogp.addResource('message');
     message.addMethod('GET', new apigateway.LambdaIntegration(ogpMessageFunction, {
       contentHandling: apigateway.ContentHandling.CONVERT_TO_BINARY,
@@ -78,7 +69,7 @@ export class ApiStack extends cdk.Stack {
 
     // 出力の設定
     new cdk.CfnOutput(this, 'ApiUrl', {
-      value: api.url,
+      value: restApi.url,
       description: 'API Gateway URL',
     });
   }
