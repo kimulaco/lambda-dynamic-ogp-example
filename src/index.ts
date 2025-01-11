@@ -1,4 +1,6 @@
-export const ping = async () => {
+import { APIGatewayProxyHandler } from 'aws-lambda';
+
+export const ping: APIGatewayProxyHandler = async () => {
   return {
     statusCode: 200,
     headers: {

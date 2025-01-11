@@ -1,0 +1,9 @@
+{
+  "app": "npx ts-node --prefer-ts-exts cdk/app.ts",
+  "watch": {
+    "include": [
+      "cdk/**",
+      "src/**"
+    ]
+  }
+}
