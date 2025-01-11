@@ -1,3 +1,4 @@
+import path from 'path';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import type { NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 
@@ -5,7 +6,10 @@ export const RUNTIME = Runtime.NODEJS_20_X;
 
 export const COMMON_BUNDLING_OPTIONS = {
   minify: true,
-  sourceMap: false,
+  sourceMap: true,
+  alias: {
+    '@': path.resolve(__dirname, '../../src')
+  }
 };
 
 export const SATORI_BUNDLING_OPTIONS = {
