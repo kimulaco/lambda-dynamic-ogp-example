@@ -1,24 +1,8 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import satori, { Font } from 'satori'
+import satori from 'satori'
 import sharp from 'sharp'
-import notoSansJpJapanese400Normal from '@/assets/fonts/noto-sans-jp-japanese-400-normal.woff'
-import notoSansJpLatin400Normal from '@/assets/fonts/noto-sans-jp-latin-400-normal.woff'
 import { OgpMessage } from '@/components/OgpMessage'
-
-const fonts: Font[] = [
-  {
-    name: 'Noto Sans JP',
-    data: notoSansJpJapanese400Normal,
-    weight: 400,
-    style: 'normal',
-  },
-  {
-    name: 'Noto Sans JP',
-    data: notoSansJpLatin400Normal,
-    weight: 400,
-    style: 'normal',
-  },
-]
+import { DEFAULT_FONTS } from '@/config/font'
 
 export const index = async (event: APIGatewayProxyEvent) => {
   const message = event.queryStringParameters?.message || 'Hello, World!'
@@ -27,7 +11,7 @@ export const index = async (event: APIGatewayProxyEvent) => {
     const svg = await satori(<OgpMessage message={message} />, {
       width: 1200,
       height: 630,
-      fonts,
+      fonts: DEFAULT_FONTS,
     })
 
     const pngBuffer = await sharp(Buffer.from(svg)).resize(1200, 630).png().toBuffer()

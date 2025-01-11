@@ -19,7 +19,6 @@ export const SATORI_BUNDLING_OPTIONS = {
   ...COMMON_BUNDLING_OPTIONS,
   loader: {
     '.woff': 'binary',
-    '.woff2': 'binary',
   },
   nodeModules: ['sharp'],
   forceDockerBundling: true,

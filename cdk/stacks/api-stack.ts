@@ -20,8 +20,7 @@ export class ApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props)
 
-    // Lambda関数の作成
-    const healthFunction = new nodejsfunction.NodejsFunction(this, 'HealthFunction', {
+    const healthFunction = new nodejsfunction.NodejsFunction(this, 'ApiHealthFunction', {
       ...FUNCTION_BASE_PROPS,
       entry: getRootPath('api/health/index.ts'),
       bundling: COMMON_BUNDLING_OPTIONS,
@@ -55,12 +54,13 @@ export class ApiStack extends cdk.Stack {
       binaryMediaTypes: ['*/*'],
     })
 
-    // エンドポイントの作成
+    // APIエンドポイントの作成
     const api = restApi.root.addResource('api')
     const health = api.addResource('health')
     health.addMethod('GET', new apigateway.LambdaIntegration(healthFunction))
 
-    const ogp = api.addResource('ogp')
+    // OGPエンドポイントの作成
+    const ogp = restApi.root.addResource('ogp')
     const message = ogp.addResource('message')
     message.addMethod(
       'GET',
