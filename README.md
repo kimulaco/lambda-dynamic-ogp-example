@@ -25,16 +25,19 @@
 ## セットアップ
 
 1. 依存パッケージのインストール
+
 ```bash
 npm install
 ```
 
 2. AWSクレデンシャルの設定
+
 ```bash
 aws configure
 ```
 
 3. CDKブートストラップ
+
 ```bash
 npm run bootstrap
 ```
@@ -42,11 +45,13 @@ npm run bootstrap
 ## デプロイ
 
 ### 開発環境
+
 ```bash
 npm run deploy:dev
 ```
 
 ### 本番環境
+
 ```bash
 npm run deploy:prod
 ```
@@ -54,22 +59,32 @@ npm run deploy:prod
 ## ローカル開発
 
 ### CDKスタックの確認
+
 ```bash
 npm run synth
 ```
 
+### Lint
+
+```bash
+npm run lint
+
+npm run lint:fix
+```
+
 ## API エンドポイント
 
-### GET /ogp/message
+### GET /api/health
+
+- ヘルスチェック
+- レスポンス:
+  - Content-Type: application/json
+  - Body: `{ "status": "ok" }`
+
+### GET /api/ogp/message
 
 - OGP画像生成
 - クエリパラメータ:
   - `message`: 表示するテキスト（必須）
 - レスポンス:
   - Content-Type: image/png
-
-### GET /ping
-- ヘルスチェック
-- レスポンス:
-  - Content-Type: application/json
-  - Body: `{ "status": "ok" }`

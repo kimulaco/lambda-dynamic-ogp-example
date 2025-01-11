@@ -27,9 +27,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "cdk/**/*"
-  ],
+  "include": ["src/**/*", "cdk/**/*"],
   "exclude": ["node_modules", "cdk.out", "dist"]
 }

@@ -1,4 +1,4 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyHandler } from 'aws-lambda'
 
 export const index: APIGatewayProxyHandler = async () => {
   return {
@@ -10,5 +10,5 @@ export const index: APIGatewayProxyHandler = async () => {
       status: 'ok',
     }),
     isBase64Encoded: false,
-  };
-};
+  }
+}

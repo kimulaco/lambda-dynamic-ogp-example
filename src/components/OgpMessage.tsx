@@ -1,7 +1,7 @@
-import type { FC } from 'react';
+import type { FC } from 'react'
 
 interface Props {
-  message: string;
+  message: string
 }
 
 export const OgpMessage: FC<Props> = ({ message }) => {
@@ -26,5 +26,5 @@ export const OgpMessage: FC<Props> = ({ message }) => {
     >
       {message}
     </div>
-  );
-};
+  )
+}

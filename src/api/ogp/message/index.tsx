@@ -1,9 +1,9 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import satori, { Font } from 'satori';
-import sharp from 'sharp';
-import notoSansJpJapanese400Normal from '../../../assets/fonts/noto-sans-jp-japanese-400-normal.woff';
-import notoSansJpLatin400Normal from '../../../assets/fonts/noto-sans-jp-latin-400-normal.woff';
-import { OgpMessage } from '../../../components/OgpMessage';
+import { APIGatewayProxyEvent } from 'aws-lambda'
+import satori, { Font } from 'satori'
+import sharp from 'sharp'
+import notoSansJpJapanese400Normal from '../../../assets/fonts/noto-sans-jp-japanese-400-normal.woff'
+import notoSansJpLatin400Normal from '../../../assets/fonts/noto-sans-jp-latin-400-normal.woff'
+import { OgpMessage } from '../../../components/OgpMessage'
 
 const fonts: Font[] = [
   {
@@ -18,25 +18,19 @@ const fonts: Font[] = [
     weight: 400,
     style: 'normal',
   },
-];
+]
 
 export const index = async (event: APIGatewayProxyEvent) => {
-  const message = event.queryStringParameters?.message || 'Hello, World!';
+  const message = event.queryStringParameters?.message || 'Hello, World!'
 
   try {
-    const svg = await satori(
-      <OgpMessage message={message} />,
-      {
-        width: 1200,
-        height: 630,
-        fonts,
-      }
-    );
+    const svg = await satori(<OgpMessage message={message} />, {
+      width: 1200,
+      height: 630,
+      fonts,
+    })
 
-    const pngBuffer = await sharp(Buffer.from(svg))
-      .resize(1200, 630)
-      .png()
-      .toBuffer();
+    const pngBuffer = await sharp(Buffer.from(svg)).resize(1200, 630).png().toBuffer()
 
     return {
       statusCode: 200,
@@ -46,16 +40,16 @@ export const index = async (event: APIGatewayProxyEvent) => {
       },
       body: pngBuffer.toString('base64'),
       isBase64Encoded: true,
-    };
+    }
   } catch (error) {
-    console.error('Error generating image:', error);
-    const details = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error generating image:', error)
+    const details = error instanceof Error ? error.message : 'Unknown error'
     return {
       statusCode: 500,
       body: JSON.stringify({
         error: 'Failed to generate image',
         details,
       }),
-    };
+    }
   }
-};
+}
