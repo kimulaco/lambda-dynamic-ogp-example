@@ -1,8 +1,9 @@
 import { APIGatewayProxyHandler, APIGatewayProxyEvent } from 'aws-lambda';
-import satori, { Font } from 'satori'
-import sharp from 'sharp'
-import notoSansJpJapanese400Normal from './fonts/noto-sans-jp-japanese-400-normal.woff';
-import notoSansJpLatin400Normal from './fonts/noto-sans-jp-latin-400-normal.woff';
+import satori, { Font } from 'satori';
+import sharp from 'sharp';
+import notoSansJpJapanese400Normal from './assets/fonts/noto-sans-jp-japanese-400-normal.woff';
+import notoSansJpLatin400Normal from './assets/fonts/noto-sans-jp-latin-400-normal.woff';
+import { OgpMessage } from './components/OgpMessage';
 
 const fonts: Font[] = [
   {
@@ -37,28 +38,7 @@ export const ogpMessage = async (event: APIGatewayProxyEvent) => {
 
   try {
     const svg = await satori(
-      {
-        type: 'div',
-        props: {
-          style: {
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-            fontSize: 60,
-            fontWeight: 400,
-            fontFamily: 'Noto Sans JP',
-            color: 'black',
-            padding: '50px',
-            lineHeight: 1.2,
-            textAlign: 'center',
-          },
-          children: message,
-        },
-      },
+      <OgpMessage message={message} />,
       {
         width: 1200,
         height: 630,
@@ -92,4 +72,3 @@ export const ogpMessage = async (event: APIGatewayProxyEvent) => {
     };
   }
 };
-

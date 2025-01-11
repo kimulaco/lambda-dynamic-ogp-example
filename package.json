@@ -18,12 +18,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "react": "^19.0.0",
     "satori": "^0.12.1",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",
     "@types/node": "^22.10.5",
+    "@types/react": "^19.0.4",
     "aws-cdk": "^2.174.1",
     "aws-cdk-lib": "^2.175.0",
     "constructs": "^10.4.2",

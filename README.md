@@ -60,7 +60,7 @@ npm run synth
 
 ## API エンドポイント
 
-### GET /ogp/message`
+### GET /ogp/message
 
 - OGP画像生成
 - クエリパラメータ:
@@ -68,7 +68,7 @@ npm run synth
 - レスポンス:
   - Content-Type: image/png
 
-### `GET /ping`
+### GET /ping
 - ヘルスチェック
 - レスポンス:
   - Content-Type: application/json

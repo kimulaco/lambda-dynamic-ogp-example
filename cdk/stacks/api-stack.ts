@@ -13,23 +13,28 @@ export class ApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const index = path.join(__dirname, '../../src/index.ts');
+    const index = path.join(__dirname, '../../src/index.tsx');
+
+    const bundlingOptions = {
+      minify: true,
+      sourceMap: true,
+      loader: {
+        '.woff': 'binary',
+        '.woff2': 'binary'
+      },
+      nodeModules: ['sharp'],
+      forceDockerBundling: true,
+      jsx: 'automatic',
+      jsxFactory: 'React.createElement',
+      jsxFragment: 'React.Fragment',
+    };
 
     // Lambda関数の作成
     const pingFunction = new nodejsfunction.NodejsFunction(this, 'PingFunction', {
       runtime: lambda.Runtime.NODEJS_20_X,
       entry: index,
       handler: 'ping',
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        loader: {
-          '.woff': 'binary',
-          '.woff2': 'binary'
-        },
-        nodeModules: ['sharp'],
-        forceDockerBundling: true,
-      },
+      bundling: bundlingOptions,
       environment: {
         STAGE: props.stage,
       },
@@ -41,16 +46,7 @@ export class ApiStack extends cdk.Stack {
       handler: 'ogpMessage',
       memorySize: 512,
       timeout: cdk.Duration.seconds(10),
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        loader: {
-          '.woff': 'binary',
-          '.woff2': 'binary'
-        },
-        nodeModules: ['sharp'],
-        forceDockerBundling: true,
-      },
+      bundling: bundlingOptions,
       environment: {
         STAGE: props.stage,
       },
