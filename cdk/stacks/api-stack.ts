@@ -23,6 +23,10 @@ export class ApiStack extends cdk.Stack {
       bundling: {
         minify: true,
         sourceMap: true,
+        loader: {
+          '.woff': 'binary',
+          '.woff2': 'binary'
+        },
       },
       environment: {
         STAGE: props.stage,
@@ -36,6 +40,10 @@ export class ApiStack extends cdk.Stack {
       bundling: {
         minify: true,
         sourceMap: true,
+        loader: {
+          '.woff': 'binary',
+          '.woff2': 'binary'
+        },
       },
       environment: {
         STAGE: props.stage,
