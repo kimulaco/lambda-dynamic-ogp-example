@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url'
 import * as cdk from 'aws-cdk-lib'
 import * as apigateway from 'aws-cdk-lib/aws-apigateway'
 import * as nodejsfunction from 'aws-cdk-lib/aws-lambda-nodejs'
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront'
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins'
 import { Construct } from 'constructs'
 import { COMMON_BUNDLING_OPTIONS, SATORI_BUNDLING_OPTIONS, FUNCTION_BASE_PROPS } from '../config/api'
 
@@ -86,6 +88,31 @@ export class ApiStack extends cdk.Stack {
         contentHandling: apigateway.ContentHandling.CONVERT_TO_BINARY,
       }),
     )
+
+    // CloudFrontディストリビューションの作成
+    const distribution = new cloudfront.Distribution(this, 'OgpDistribution', {
+      defaultBehavior: {
+        origin: new origins.RestApiOrigin(restApi),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+        cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
+        cachePolicy: new cloudfront.CachePolicy(this, 'OgpCachePolicy', {
+          defaultTtl: cdk.Duration.hours(24),
+          maxTtl: cdk.Duration.days(7),
+          minTtl: cdk.Duration.minutes(5),
+          queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+          enableAcceptEncodingBrotli: true,
+          enableAcceptEncodingGzip: true,
+        }),
+      },
+      comment: `OGP Distribution for ${props.stage}`,
+    })
+
+    // CloudFrontのURLを出力
+    new cdk.CfnOutput(this, 'DistributionUrl', {
+      value: `https://${distribution.distributionDomainName}`,
+      description: 'CloudFront Distribution URL',
+    })
 
     // 出力の設定
     new cdk.CfnOutput(this, 'ApiUrl', {
