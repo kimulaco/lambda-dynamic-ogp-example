@@ -40,6 +40,17 @@ export class ApiStack extends cdk.Stack {
       },
     })
 
+    const ogpGachaFunction = new nodejsfunction.NodejsFunction(this, 'OgpGachaFunction', {
+      ...FUNCTION_BASE_PROPS,
+      entry: getRootPath('ogp/gacha/index.tsx'),
+      bundling: SATORI_BUNDLING_OPTIONS,
+      memorySize: 512,
+      timeout: cdk.Duration.seconds(10),
+      environment: {
+        STAGE: props.stage,
+      },
+    })
+
     // API Gatewayの作成
     const restApi = new apigateway.RestApi(this, 'DynamicOgpApi', {
       restApiName: `Dynamic OGP API (${props.stage})`,
@@ -65,6 +76,13 @@ export class ApiStack extends cdk.Stack {
     message.addMethod(
       'GET',
       new apigateway.LambdaIntegration(ogpMessageFunction, {
+        contentHandling: apigateway.ContentHandling.CONVERT_TO_BINARY,
+      }),
+    )
+    const gacha = ogp.addResource('gacha')
+    gacha.addMethod(
+      'GET',
+      new apigateway.LambdaIntegration(ogpGachaFunction, {
         contentHandling: apigateway.ContentHandling.CONVERT_TO_BINARY,
       }),
     )

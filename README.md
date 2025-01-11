@@ -92,3 +92,11 @@ npm run lint:fix
   - `message`: 表示するテキスト（必須）
 - レスポンス:
   - Content-Type: image/png
+
+#### GET /ogp/gacha
+
+- ガチャ結果のOGP画像生成
+- クエリパラメータ:
+  - `results`: ガチャ結果（必須）
+- レスポンス:
+  - Content-Type: image/png
