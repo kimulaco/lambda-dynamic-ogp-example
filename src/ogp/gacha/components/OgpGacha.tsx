@@ -19,7 +19,7 @@ export const OgpGacha: FC<Props> = ({ results }) => {
   const bigWinCount = results.filter((result) => result === 2).length
   const smallWinCount = results.filter((result) => result === 1).length
   const missCount = results.filter((result) => result === 0).length
-  const displayResults = results.slice(0, 10)
+  const displayResults = results.slice(0, 15)
 
   return (
     <div
@@ -41,6 +41,7 @@ export const OgpGacha: FC<Props> = ({ results }) => {
           padding: '30px',
           backgroundColor: '#fff',
           borderRadius: '10px',
+          overflow: 'hidden',
         }}
       >
         <div
@@ -48,9 +49,9 @@ export const OgpGacha: FC<Props> = ({ results }) => {
             ...divStyleBase,
             flexDirection: 'row',
             flexWrap: 'wrap',
-            width: '100%',
+            justifyContent: 'flex-start',
             gap: '30px',
-            borderRadius: '10px',
+            width: '100%',
           }}
         >
           {displayResults.map((result, index) => (
@@ -61,33 +62,41 @@ export const OgpGacha: FC<Props> = ({ results }) => {
         <div
           style={{
             ...divStyleBase,
-            width: '800px',
-            height: '300px',
+            width: '100%',
+            height: '100%',
             position: 'absolute',
-            backgroundColor: 'rgba(250, 250, 250, 0.9)',
-            boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-            borderRadius: '10px',
           }}
         >
-          {totalGachaCount <= 0 && <p style={{ fontSize: 48 }}>ガチャしてみよう!!</p>}
+          <div
+            style={{
+              ...divStyleBase,
+              width: '800px',
+              height: '300px',
+              backgroundColor: 'rgba(250, 250, 250, 0.9)',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+              borderRadius: '10px',
+            }}
+          >
+            {totalGachaCount <= 0 && <p style={{ fontSize: 48 }}>ガチャしてみよう!!</p>}
 
-          {totalGachaCount > 0 && <p style={{ fontSize: 48 }}>{totalGachaCount}ガチャしたよ!!</p>}
+            {totalGachaCount > 0 && <p style={{ fontSize: 48 }}>{totalGachaCount}ガチャしたよ!!</p>}
 
-          {totalGachaCount > 0 && (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '30px',
-              }}
-            >
-              <p style={{ fontSize: 30 }}>大当たり: {bigWinCount}</p>
-              <p style={{ fontSize: 30 }}>小当たり: {smallWinCount}</p>
-              <p style={{ fontSize: 30 }}>はずれ: {missCount}</p>
-            </div>
-          )}
+            {totalGachaCount > 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '30px',
+                }}
+              >
+                <p style={{ fontSize: 30 }}>大当たり: {bigWinCount}</p>
+                <p style={{ fontSize: 30 }}>小当たり: {smallWinCount}</p>
+                <p style={{ fontSize: 30 }}>はずれ: {missCount}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
