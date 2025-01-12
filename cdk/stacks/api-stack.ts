@@ -24,7 +24,7 @@ export class ApiStack extends cdk.Stack {
 
     const healthFunction = new nodejsfunction.NodejsFunction(this, 'ApiHealthFunction', {
       ...FUNCTION_BASE_PROPS,
-      entry: getRootPath('api/health/index.ts'),
+      entry: getRootPath('lambda/api/health/index.ts'),
       bundling: COMMON_BUNDLING_OPTIONS,
       environment: {
         STAGE: props.stage,
@@ -33,7 +33,7 @@ export class ApiStack extends cdk.Stack {
 
     const ogpMessageFunction = new nodejsfunction.NodejsFunction(this, 'OgpMessageFunction', {
       ...FUNCTION_BASE_PROPS,
-      entry: getRootPath('ogp/message/index.tsx'),
+      entry: getRootPath('lambda/ogp/message/index.tsx'),
       bundling: SATORI_BUNDLING_OPTIONS,
       memorySize: 512,
       timeout: cdk.Duration.seconds(10),
@@ -44,7 +44,7 @@ export class ApiStack extends cdk.Stack {
 
     const ogpGachaFunction = new nodejsfunction.NodejsFunction(this, 'OgpGachaFunction', {
       ...FUNCTION_BASE_PROPS,
-      entry: getRootPath('ogp/gacha/index.tsx'),
+      entry: getRootPath('lambda/ogp/gacha/index.tsx'),
       bundling: SATORI_BUNDLING_OPTIONS,
       memorySize: 512,
       timeout: cdk.Duration.seconds(10),

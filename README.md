@@ -8,12 +8,13 @@
   - CDK
   - Lambda
   - API Gateway
+  - CloudFront
   - CloudWatch
 - Node.js 20.x
-- TypeScript
-- esbuild
-- satori (JSXをSVGに変換)
-- sharp (SVGをPNGに変換)
+  - TypeScript
+  - esbuild
+  - satori (JSXをSVGに変換)
+  - sharp (SVGをPNGに変換)
 
 ## 必要要件
 

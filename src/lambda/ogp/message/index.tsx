@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import satori from 'satori'
 import sharp from 'sharp'
-import { OgpMessage } from '@/components/OgpMessage'
+import { OgpMessage } from './components/OgpMessage'
 import { DEFAULT_FONTS } from '@/config/font'
 
 export const index = async (event: APIGatewayProxyEvent) => {
